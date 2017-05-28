@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>gCalc</title>
+
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    
+
+    <div class="container">
+        <div id="app">
+            
+            <div id="head">
+                <div class="toggle-tab" :class="{'active': mode=='number'}" @click="mode='number'">
+                    Numeric
+                </div>
+                <div class="toggle-tab" :class="{'active': mode=='algebra'}" @click="mode='algebra'">
+                    Algebra
+                </div>
+                <div id="options-container">
+                    <i 
+                        class="fa" aria-hidden="true"
+                        v-if="mode=='algebra'"
+                        :class="{'fa-calculator': decimal, 'fa-pencil': !decimal}"
+                        @click="decimal = !decimal"  
+                    ></i>
+                    <i
+                        :class="{fa:true, 'fa-question-circle-o':infoShown, 'fa-question-circle':!infoShown  }" aria-hidden="true"
+                        @click="infoShown = !infoShown"></i>
+                    <i class="fa fa-trash" aria-hidden="true" @click="clearAll()"></i>
+                </div>
+            </div>
+            
+            <div id="body" v-if="!infoShown">
+                <div id="input-container">
+                    <input 
+                        type="text" placeholder="Enter some computations" ref="numberInput"
+                        v-model="numberInput" v-if="mode=='number'"
+                        @keyup.enter="runCommand()"
+                        @keyup.up="changeInput('number', 1)" @keyup.down="changeInput('number', -1)"   
+                    >
+                    <input 
+                        type="text" placeholder="Enter some algebra" ref="algebraInput"
+                        v-model="algebraInput" v-if="mode=='algebra'" @keyup.enter="runCommand()"
+                        @keyup.up="changeInput('algebra', 1)" @keyup.down="changeInput('algebra', -1)"
+                        @keyup.esc ="decimal = !decimal"
+                    >
+                </div>
+                <div id="output-container">
+                    <ul id="output-list">
+                        <li v-if="inputPreview !== ''" v-html="inputPreview"></li>
+                        <li v-for="(el, i) in outputs" >
+                            <span class="itemNum" v-if="mode=='number' && !el.def">
+                                :{{outputs.length - i}}
+                            </span>
+                            <i class="fa fa-trash delete" aria-hidden="true" @click="deleteItem(i)"></i>
+                            <span v-html="el.out"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div v-else v-html="appInfo" id="appInfo"></div>
+            
+        </div>
+
+
+    </div> <!-- End of Container -->
+
+
+
+    <!-- KATEX -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+
+    <!-- MathJS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.13.1/math.min.js"></script>
+    <!-- Nerdamer -->
+    <script src="js/nerdamer.core.js"></script>
+    <script src="js/Algebra.js"></script>
+    <script src="js/Calculus.js"></script>
+    <script src="js/Solve.js"></script>
+
+    <!-- VueJS -->
+    <script src="js/vue.min.js"></script>
+    <!-- My control file -->
+    <script src="js/main-dist.js"></script>
+</body>
+</html>
