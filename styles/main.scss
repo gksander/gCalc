@@ -24,15 +24,20 @@ $gray: gray;
         justify-content: space-around;
         // margin: 5px;
         border-bottom: 1px solid $gray;
+        // height: 40px;
 
         // THESE ARE THE "NUMERIC" AND "ALGEBRA" TABS
         >div {
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             // width: 30%;
-            text-align:center;
+            // text-align:center;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
             transition: all 0.3s;
-            // font-size: 20px;
+            font-size: 20px;
             &.toggle-tab {
                 width: 34%;
                 &.active {
@@ -57,6 +62,7 @@ $gray: gray;
 
             &#options-container {
                 i {
+                    font-size: 22px;
                     margin: 0px 4px;
                     cursor: pointer;
                 }
